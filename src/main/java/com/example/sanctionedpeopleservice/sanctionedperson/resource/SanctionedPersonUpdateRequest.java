@@ -1,4 +1,4 @@
-package com.example.sanctionedpeopleservice.service.resource;
+package com.example.sanctionedpeopleservice.sanctionedperson.resource;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SanctionedPersonRequest {
-  private String name;
+public class SanctionedPersonUpdateRequest {
+  private String newPersonName;
 }
