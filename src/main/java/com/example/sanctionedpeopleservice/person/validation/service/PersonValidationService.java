@@ -24,10 +24,10 @@ public class PersonValidationService {
 
   public List<PersonValidationResult> validatePerson(String personName) {
     return getSanctionedPeopleConditions().stream()
-        .map(sanctionedPersonCondition -> PersonValidationResult.builder()
-            .personName(sanctionedPersonCondition.getPersonName())
-            .percentage(getPercentageOfSimilarityFromSanctionedPeople(sanctionedPersonCondition.getConditions(), personName))
-            .build())
+        .map(sanctionedPersonCondition ->
+                 new PersonValidationResult(sanctionedPersonCondition.getPersonName(),
+                                            getPercentageOfSimilarityFromSanctionedPeople(sanctionedPersonCondition.getConditions(),
+                                                                                          personName)))
         .toList();
   }
 
