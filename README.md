@@ -1,6 +1,6 @@
 # Sanctioned People Service
 
-[![N|Solid](https://www.pngfind.com/pngs/m/53-535670_spring-framework-logo-spring-boot-hd-png-download.png)]()
+<img src="https://www.nicepng.com/png/full/31-314820_logo-spring-spring-framework-logo-svg.png" width="350" height="250" />
 
 ## General Info
 
