@@ -31,7 +31,7 @@ public class PersonValidationFactory {
                                                             String description) {
     return PersonValidationResource.builder()
         .personName(providedPersonName)
-        .isSanctioned(isSanctioned)
+        .sanctioned(isSanctioned)
         .description(description)
         .build();
   }
