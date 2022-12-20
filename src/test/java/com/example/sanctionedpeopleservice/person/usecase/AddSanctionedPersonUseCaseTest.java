@@ -40,7 +40,9 @@ class AddSanctionedPersonUseCaseTest {
 
   @Test
   void addSanctionedPerson_AlreadyExists() {
+    Long personId = 1L;
     when(sanctionedPersonRepository.findByPersonName(personName)).thenReturn(Optional.of(SanctionedPerson.builder()
+                                                                                             .id(personId)
                                                                                              .personName(personName)
                                                                                              .build()));
 
@@ -51,7 +53,8 @@ class AddSanctionedPersonUseCaseTest {
     Optional<UseCaseError> useCaseError = addSanctionedPersonUseCase.addSanctionedPerson(sanctionedPersonRequest).getError();
 
     assertTrue(useCaseError.isPresent());
-    assertError(useCaseError.get(), "Person: ".concat(personName).concat(" already exist in sanctioned people list!"));
+    assertError(useCaseError.get(), "Person with id: ".concat(personId.toString())
+        .concat(" already exist in sanctioned people list!"));
   }
 
   private void assertError(UseCaseError useCaseError,

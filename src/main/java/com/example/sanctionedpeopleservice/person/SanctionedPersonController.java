@@ -47,10 +47,10 @@ public class SanctionedPersonController {
   }
 
   @Operation(summary = "Get sanctioned person")
-  @GetMapping(value = "/sanctions/{personName}")
-  public ResponseEntity<SanctionedPersonResource> getSanctionedPerson(@PathVariable String personName) {
+  @GetMapping(value = "/sanctions/{personId}")
+  public ResponseEntity<SanctionedPersonResource> getSanctionedPerson(@PathVariable Long personId) {
     return ResponseEntity.ok(sanctionedPersonResourceFactory.createSanctionedPersonResource(
-        createResponse(findSanctionedPersonUseCase.getSanctionedPerson(personName))));
+        createResponse(findSanctionedPersonUseCase.getSanctionedPerson(personId))));
   }
 
   @Operation(summary = "Get sanctioned people")
@@ -68,15 +68,15 @@ public class SanctionedPersonController {
   ResponseEntity<Object> addSanctionedPerson(@RequestBody SanctionedPersonRequest request) {
     return ResponseEntity.created(linkTo(methodOn(getClass())
         .getSanctionedPerson(createResponse(addSanctionedPersonUseCase.addSanctionedPerson(request))
-            .getPersonName()))
+            .getId()))
         .toUri()).build();
   }
 
   @Operation(summary = "Update sanctioned person")
-  @PutMapping(value = "/sanctions/{personName}")
-  ResponseEntity<Object> updateSanctionedPerson(@PathVariable String personName,
+  @PutMapping(value = "/sanctions/{personId}")
+  ResponseEntity<Object> updateSanctionedPerson(@PathVariable Long personId,
                                                 @RequestBody SanctionedPersonUpdateRequest request) {
-    updateSanctionedPersonUseCase.updateSanctionedPerson(personName, request).getError().ifPresent(error -> {
+    updateSanctionedPersonUseCase.updateSanctionedPerson(personId, request).getError().ifPresent(error -> {
       throw new UseCaseErrorResponseException(error);
     });
 
@@ -84,9 +84,9 @@ public class SanctionedPersonController {
   }
 
   @Operation(summary = "Delete sanctioned person")
-  @DeleteMapping(value = "/sanctions/{personName}")
-  ResponseEntity<Object> deleteSanctionedPerson(@PathVariable String personName) {
-    deleteSanctionedPersonUseCase.deleteSanctionedPerson(personName).getError().ifPresent(error -> {
+  @DeleteMapping(value = "/sanctions/{personId}")
+  ResponseEntity<Object> deleteSanctionedPerson(@PathVariable Long personId) {
+    deleteSanctionedPersonUseCase.deleteSanctionedPerson(personId).getError().ifPresent(error -> {
       throw new UseCaseErrorResponseException(error);
     });
 

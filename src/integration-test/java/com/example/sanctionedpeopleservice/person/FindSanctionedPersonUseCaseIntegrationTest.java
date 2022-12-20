@@ -27,7 +27,7 @@ class FindSanctionedPersonUseCaseIntegrationTest extends BaseIntegrationTest {
         .build();
 
     SanctionedPersonResource sanctionedPersonResource = getResponse(GET, SANCTIONED_PERSON
-        .getPath(generatedPerson.getSanctionedPerson().getPersonName()), HTTP_OK)
+        .getPath(generatedPerson.getSanctionedPerson().getId()), HTTP_OK)
         .body()
         .jsonPath()
         .getObject("", SanctionedPersonResource.class);
@@ -52,14 +52,14 @@ class FindSanctionedPersonUseCaseIntegrationTest extends BaseIntegrationTest {
 
   @Test
   void getSanctionedPerson_NotFound() {
-    String personName = "personName";
+    Long personId = 1L;
 
-    ApiError error = getResponse(GET, SANCTIONED_PERSON.getPath(personName), HTTP_NOT_FOUND)
+    ApiError error = getResponse(GET, SANCTIONED_PERSON.getPath(personId), HTTP_NOT_FOUND)
         .body()
         .jsonPath()
         .getObject("", GenericApiError.class).getError();
 
-    assertPersonNonExistenceError(personName, error);
+    assertPersonNonExistenceError(personId, error);
   }
 
   private void assertSanctionedPerson(GeneratedPerson generatedPerson, SanctionedPersonResource sanctionedPersonResource) {

@@ -21,15 +21,15 @@ public class SanctionedPersonResourceFactory {
         .id(sanctionedPerson.getId())
         .personName(sanctionedPerson.getPersonName())
         .build()
-        .add(createSanctionedPersonLinks(sanctionedPerson.getPersonName()));
+        .add(createSanctionedPersonLinks(sanctionedPerson.getId()));
   }
 
-  private List<Link> createSanctionedPersonLinks(String personName) {
+  private List<Link> createSanctionedPersonLinks(Long personId) {
     return List.of(
-        linkTo(methodOn(SanctionedPersonController.class).updateSanctionedPerson(personName,
+        linkTo(methodOn(SanctionedPersonController.class).updateSanctionedPerson(personId,
             SanctionedPersonUpdateRequest.builder().build()))
             .withRel("update-sanctioned-person"),
-        linkTo(methodOn(SanctionedPersonController.class).deleteSanctionedPerson(personName))
+        linkTo(methodOn(SanctionedPersonController.class).deleteSanctionedPerson(personId))
             .withRel("delete-sanctioned-person")
     );
   }

@@ -20,11 +20,11 @@ public class UpdateSanctionedPersonUseCase {
     this.sanctionedPersonRepository = sanctionedPersonRepository;
   }
 
-  public UseCaseResult<SanctionedPerson> updateSanctionedPerson(String personName,
+  public UseCaseResult<SanctionedPerson> updateSanctionedPerson(Long personId,
                                                                 SanctionedPersonUpdateRequest request) {
-    return sanctionedPersonRepository.findByPersonName(personName)
+    return sanctionedPersonRepository.findById(personId)
         .map(sanctionedPerson -> updatePerson(sanctionedPerson, request.getNewPersonName()))
-        .orElseGet(() -> new UseCaseResult<>(createPersonNonExistenceError(personName)));
+        .orElseGet(() -> new UseCaseResult<>(createPersonNonExistenceError(personId)));
   }
 
   private UseCaseResult<SanctionedPerson> updatePerson(SanctionedPerson sanctionedPerson, String newPersonName) {
@@ -34,11 +34,11 @@ public class UpdateSanctionedPersonUseCase {
     return new UseCaseResult<>(sanctionedPerson);
   }
 
-  private UseCaseError createPersonNonExistenceError(String personName) {
+  private UseCaseError createPersonNonExistenceError(Long personId) {
     return new UseCaseError("Person does not exist", PERSON_NOT_FOUND,
         List.of(ErrorDetail.builder()
-            .message("Person: "
-                .concat(personName)
+            .message("Person with id: "
+                .concat(personId.toString())
                 .concat(" does not exist in sanctioned people list!"))
             .build()));
   }

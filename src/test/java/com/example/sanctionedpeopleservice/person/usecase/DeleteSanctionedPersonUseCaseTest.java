@@ -20,18 +20,17 @@ class DeleteSanctionedPersonUseCaseTest {
   private final DeleteSanctionedPersonUseCase deleteSanctionedPersonUseCase =
       new DeleteSanctionedPersonUseCase(sanctionedPersonRepository);
 
-  private final String personName = "personName";
+  private final Long personId = 1L;
 
   @Test
   void deleteSanctionedPerson() {
     SanctionedPerson sanctionedPerson = SanctionedPerson.builder()
-        .id(1L)
-        .personName(personName)
+        .id(personId)
         .build();
 
-    when(sanctionedPersonRepository.findByPersonName(personName)).thenReturn(Optional.of(sanctionedPerson));
+    when(sanctionedPersonRepository.findById(personId)).thenReturn(Optional.of(sanctionedPerson));
 
-    UseCaseResult<SanctionedPerson> useCaseResult = deleteSanctionedPersonUseCase.deleteSanctionedPerson(personName);
+    UseCaseResult<SanctionedPerson> useCaseResult = deleteSanctionedPersonUseCase.deleteSanctionedPerson(personId);
 
     verify(sanctionedPersonRepository).deleteById(useCaseResult.getResult().getId());
     assertEquals(sanctionedPerson, useCaseResult.getResult());
@@ -39,10 +38,11 @@ class DeleteSanctionedPersonUseCaseTest {
 
   @Test
   void deleteSanctionedPerson_NotFound() {
-    Optional<UseCaseError> useCaseError = deleteSanctionedPersonUseCase.deleteSanctionedPerson(personName).getError();
+    Optional<UseCaseError> useCaseError = deleteSanctionedPersonUseCase.deleteSanctionedPerson(personId).getError();
 
     assertTrue(useCaseError.isPresent());
-    assertError(useCaseError.get(), "Person: ".concat(personName).concat(" does not exist in sanctioned people list!"));
+    assertError(useCaseError.get(), "Person with id: ".concat(personId.toString())
+        .concat(" does not exist in sanctioned people list!"));
   }
 
   private void assertError(UseCaseError useCaseError,

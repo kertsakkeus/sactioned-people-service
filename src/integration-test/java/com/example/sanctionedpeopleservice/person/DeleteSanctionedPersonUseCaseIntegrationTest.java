@@ -21,14 +21,14 @@ public class DeleteSanctionedPersonUseCaseIntegrationTest extends BaseIntegratio
         .build();
 
     getResponse(DELETE, SANCTIONED_PERSON
-        .getPath(generatedPerson.getSanctionedPerson().getPersonName()), HTTP_NO_CONTENT);
+        .getPath(generatedPerson.getSanctionedPerson().getId()), HTTP_NO_CONTENT);
 
     ApiError apiError = getResponse(GET, SANCTIONED_PERSON
-        .getPath(generatedPerson.getSanctionedPerson().getPersonName()), HTTP_NOT_FOUND)
+        .getPath(generatedPerson.getSanctionedPerson().getId()), HTTP_NOT_FOUND)
         .body()
         .jsonPath()
         .getObject("", GenericApiError.class).getError();
 
-    assertPersonNonExistenceError(generatedPerson.getSanctionedPerson().getPersonName(), apiError);
+    assertPersonNonExistenceError(generatedPerson.getSanctionedPerson().getId(), apiError);
   }
 }
