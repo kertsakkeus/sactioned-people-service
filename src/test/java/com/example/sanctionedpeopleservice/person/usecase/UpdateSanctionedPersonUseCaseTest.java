@@ -21,7 +21,7 @@ class UpdateSanctionedPersonUseCaseTest {
   private final UpdateSanctionedPersonUseCase updateSanctionedPersonUseCase =
       new UpdateSanctionedPersonUseCase(sanctionedPersonRepository);
 
-  private final String personName = "personName";
+  private final Long personId = 1L;
 
   @Test
   void updateSanctionedPerson() {
@@ -31,12 +31,11 @@ class UpdateSanctionedPersonUseCaseTest {
         .newPersonName(newPersonName)
         .build();
 
-    when(sanctionedPersonRepository.findByPersonName(personName)).thenReturn(Optional.of(SanctionedPerson.builder()
+    when(sanctionedPersonRepository.findById(personId)).thenReturn(Optional.of(SanctionedPerson.builder()
                                                                                              .id(1L)
-                                                                                             .personName(personName)
                                                                                              .build()));
 
-    UseCaseResult<SanctionedPerson> useCaseResult = updateSanctionedPersonUseCase.updateSanctionedPerson(personName,
+    UseCaseResult<SanctionedPerson> useCaseResult = updateSanctionedPersonUseCase.updateSanctionedPerson(personId,
                                                                                                          updateRequest);
 
     verify(sanctionedPersonRepository).save(useCaseResult.getResult());
@@ -49,11 +48,12 @@ class UpdateSanctionedPersonUseCaseTest {
         .newPersonName("newPersonName")
         .build();
 
-    Optional<UseCaseError> useCaseError = updateSanctionedPersonUseCase.updateSanctionedPerson(personName,
+    Optional<UseCaseError> useCaseError = updateSanctionedPersonUseCase.updateSanctionedPerson(personId,
                                                                                                updateRequest).getError();
 
     assertTrue(useCaseError.isPresent());
-    assertError(useCaseError.get(), "Person: ".concat(personName).concat(" does not exist in sanctioned people list!"));
+    assertError(useCaseError.get(), "Person with id: ".concat(personId.toString())
+        .concat(" does not exist in sanctioned people list!"));
   }
 
   private void assertError(UseCaseError useCaseError,

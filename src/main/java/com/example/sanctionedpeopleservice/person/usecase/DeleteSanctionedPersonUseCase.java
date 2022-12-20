@@ -19,20 +19,20 @@ public class DeleteSanctionedPersonUseCase {
     this.sanctionedPersonRepository = sanctionedPersonRepository;
   }
 
-  public UseCaseResult<SanctionedPerson> deleteSanctionedPerson(String personName) {
-    return sanctionedPersonRepository.findByPersonName(personName)
+  public UseCaseResult<SanctionedPerson> deleteSanctionedPerson(Long personId) {
+    return sanctionedPersonRepository.findById(personId)
         .map(sanctionedPerson -> {
           sanctionedPersonRepository.deleteById(sanctionedPerson.getId());
           return new UseCaseResult<>(sanctionedPerson);
         })
-        .orElseGet(() -> new UseCaseResult<>(createPersonNonExistenceError(personName)));
+        .orElseGet(() -> new UseCaseResult<>(createPersonNonExistenceError(personId)));
   }
 
-  private UseCaseError createPersonNonExistenceError(String personName) {
+  private UseCaseError createPersonNonExistenceError(Long personId) {
     return new UseCaseError("Person does not exist", PERSON_NOT_FOUND,
         List.of(ErrorDetail.builder()
-            .message("Person: "
-                .concat(personName)
+            .message("Person with id: "
+                .concat(personId.toString())
                 .concat(" does not exist in sanctioned people list!"))
             .build()));
   }

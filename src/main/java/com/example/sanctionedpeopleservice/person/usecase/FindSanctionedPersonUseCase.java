@@ -19,10 +19,10 @@ public class FindSanctionedPersonUseCase {
     this.sanctionedPersonRepository = sanctionedPersonRepository;
   }
 
-  public UseCaseResult<SanctionedPersonSearchResult> getSanctionedPerson(String personName) {
-    return sanctionedPersonRepository.findByPersonName(personName)
+  public UseCaseResult<SanctionedPersonSearchResult> getSanctionedPerson(Long personId) {
+    return sanctionedPersonRepository.findById(personId)
         .map(sanctionedPerson -> new UseCaseResult<>(new SanctionedPersonSearchResult(sanctionedPerson)))
-        .orElseGet(() -> new UseCaseResult<>(createPersonNonExistenceError(personName)));
+        .orElseGet(() -> new UseCaseResult<>(createPersonNonExistenceError(personId)));
   }
 
   public UseCaseResult<List<SanctionedPersonSearchResult>> getSanctionedPeople() {
@@ -31,11 +31,11 @@ public class FindSanctionedPersonUseCase {
         .toList());
   }
 
-  private UseCaseError createPersonNonExistenceError(String personName) {
+  private UseCaseError createPersonNonExistenceError(Long personId) {
     return new UseCaseError("Person does not exist", PERSON_NOT_FOUND,
         List.of(ErrorDetail.builder()
-            .message("Person: "
-                .concat(personName)
+            .message("Person with id: "
+                .concat(personId.toString())
                 .concat(" does not exist in sanctioned people list!"))
             .build()));
   }

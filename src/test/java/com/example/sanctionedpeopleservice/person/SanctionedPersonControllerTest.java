@@ -35,6 +35,7 @@ class SanctionedPersonControllerTest {
                                      deleteSanctionedPersonUseCase, findSanctionedPersonUseCase,
                                      sanctionedPersonResourceFactory);
 
+  private final Long personId = 1L;
   private final String personName = "personName";
 
   @Test
@@ -43,14 +44,15 @@ class SanctionedPersonControllerTest {
         new UseCaseResult<>(new SanctionedPersonSearchResult(null));
 
     SanctionedPersonResource sanctionedPersonResource = SanctionedPersonResource.builder()
+        .id(personId)
         .personName(personName)
         .build();
 
-    when(findSanctionedPersonUseCase.getSanctionedPerson(personName)).thenReturn(useCaseResult);
+    when(findSanctionedPersonUseCase.getSanctionedPerson(personId)).thenReturn(useCaseResult);
     when(sanctionedPersonResourceFactory.createSanctionedPersonResource(useCaseResult.getResult()))
         .thenReturn(sanctionedPersonResource);
 
-    ResponseEntity<SanctionedPersonResource> responseEntity = sanctionedPersonController.getSanctionedPerson(personName);
+    ResponseEntity<SanctionedPersonResource> responseEntity = sanctionedPersonController.getSanctionedPerson(personId);
 
     assertEquals(sanctionedPersonResource.getPersonName(), requireNonNull(responseEntity.getBody()).getPersonName());
   }
@@ -60,6 +62,7 @@ class SanctionedPersonControllerTest {
     List<SanctionedPersonSearchResult> sanctionedPersonSearchResults = List.of(new SanctionedPersonSearchResult(null));
 
     SanctionedPersonResource sanctionedPersonResource = SanctionedPersonResource.builder()
+        .id(personId)
         .personName(personName)
         .build();
 
@@ -88,11 +91,11 @@ class SanctionedPersonControllerTest {
 
     UseCaseResult<SanctionedPerson> useCaseResult = new UseCaseResult<>(SanctionedPerson.builder().build());
 
-    when(updateSanctionedPersonUseCase.updateSanctionedPerson(personName, updateRequest)).thenReturn(useCaseResult);
+    when(updateSanctionedPersonUseCase.updateSanctionedPerson(personId, updateRequest)).thenReturn(useCaseResult);
 
-    ResponseEntity<Object> responseEntity = sanctionedPersonController.updateSanctionedPerson(personName, updateRequest);
+    ResponseEntity<Object> responseEntity = sanctionedPersonController.updateSanctionedPerson(personId, updateRequest);
 
-    verify(updateSanctionedPersonUseCase).updateSanctionedPerson(personName, updateRequest);
+    verify(updateSanctionedPersonUseCase).updateSanctionedPerson(personId, updateRequest);
     assertEquals(responseEntity, ResponseEntity.noContent().build());
   }
 
@@ -100,11 +103,11 @@ class SanctionedPersonControllerTest {
   void deleteSanctionedPerson() {
     UseCaseResult<SanctionedPerson> useCaseResult = new UseCaseResult<>(SanctionedPerson.builder().build());
 
-    when(deleteSanctionedPersonUseCase.deleteSanctionedPerson(personName)).thenReturn(useCaseResult);
+    when(deleteSanctionedPersonUseCase.deleteSanctionedPerson(personId)).thenReturn(useCaseResult);
 
-    ResponseEntity<Object> responseEntity = sanctionedPersonController.deleteSanctionedPerson(personName);
+    ResponseEntity<Object> responseEntity = sanctionedPersonController.deleteSanctionedPerson(personId);
 
-    verify(deleteSanctionedPersonUseCase).deleteSanctionedPerson(personName);
+    verify(deleteSanctionedPersonUseCase).deleteSanctionedPerson(personId);
     assertEquals(responseEntity, ResponseEntity.noContent().build());
   }
 
@@ -115,6 +118,7 @@ class SanctionedPersonControllerTest {
         .build();
 
     UseCaseResult<SanctionedPerson> useCaseResult = new UseCaseResult<>(SanctionedPerson.builder()
+                                                                            .id(personId)
                                                                             .personName(personName)
                                                                             .build());
 
@@ -123,6 +127,6 @@ class SanctionedPersonControllerTest {
     ResponseEntity<Object> responseEntity = sanctionedPersonController.addSanctionedPerson(sanctionedPersonRequest);
 
     assertNotNull(responseEntity.getHeaders().getLocation());
-    assertEquals("/sanctions/" + personName, responseEntity.getHeaders().getLocation().toString());
+    assertEquals("/sanctions/" + personId, responseEntity.getHeaders().getLocation().toString());
   }
 }

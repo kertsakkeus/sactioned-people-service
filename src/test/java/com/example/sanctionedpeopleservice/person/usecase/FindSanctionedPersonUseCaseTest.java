@@ -21,26 +21,28 @@ class FindSanctionedPersonUseCaseTest {
   private final FindSanctionedPersonUseCase findSanctionedPersonUseCase =
       new FindSanctionedPersonUseCase(sanctionedPersonRepository);
 
+  private final Long personId = 1L;
   private final String personName = "personName";
 
   @Test
   void getSanctionedPerson() {
-    when(sanctionedPersonRepository.findByPersonName(personName)).thenReturn(Optional.of(SanctionedPerson.builder()
+    when(sanctionedPersonRepository.findById(personId)).thenReturn(Optional.of(SanctionedPerson.builder()
                                                                                              .id(1L)
                                                                                              .personName(personName)
                                                                                              .build()));
 
-    UseCaseResult<SanctionedPersonSearchResult> useCaseResult = findSanctionedPersonUseCase.getSanctionedPerson(personName);
+    UseCaseResult<SanctionedPersonSearchResult> useCaseResult = findSanctionedPersonUseCase.getSanctionedPerson(personId);
 
     assertSanctionedPerson(useCaseResult.getResult());
   }
 
   @Test
   void getSanctionedPerson_NotFound() {
-    Optional<UseCaseError> useCaseError = findSanctionedPersonUseCase.getSanctionedPerson(personName).getError();
+    Optional<UseCaseError> useCaseError = findSanctionedPersonUseCase.getSanctionedPerson(personId).getError();
 
     assertTrue(useCaseError.isPresent());
-    assertError(useCaseError.get(), "Person: ".concat(personName).concat(" does not exist in sanctioned people list!"));
+    assertError(useCaseError.get(), "Person with id: ".concat(personId.toString())
+        .concat(" does not exist in sanctioned people list!"));
   }
 
   @Test

@@ -28,28 +28,29 @@ public class UpdateSanctionedPersonUseCaseIntegrationTest extends BaseIntegratio
         .newPersonName("UPDATED PERSON")
         .build();
 
-    getResponseWithBody(PUT, SANCTIONED_PERSON.getPath(generatedPerson.getSanctionedPerson().getPersonName()),
+    getResponseWithBody(PUT, SANCTIONED_PERSON.getPath(generatedPerson.getSanctionedPerson().getId()),
                         HTTP_NO_CONTENT, updateRequest);
 
     SanctionedPersonResource sanctionedPersonResource = getResponse(GET, SANCTIONED_PERSON
-        .getPath(updateRequest.getNewPersonName()), HTTP_OK)
+        .getPath(generatedPerson.getSanctionedPerson().getId()), HTTP_OK)
         .body()
         .jsonPath()
         .getObject("", SanctionedPersonResource.class);
 
+    assertEquals(generatedPerson.getSanctionedPerson().getId(), sanctionedPersonResource.getId());
     assertEquals(updateRequest.getNewPersonName(), sanctionedPersonResource.getPersonName());
   }
 
   @Test
   void updateSanctionedPerson_NotFound() {
-    String personName = "personName";
+    Long personId = 1L;
 
-    ApiError error = getResponseWithBody(PUT, SANCTIONED_PERSON.getPath(personName),
+    ApiError error = getResponseWithBody(PUT, SANCTIONED_PERSON.getPath(personId),
                                          HTTP_NOT_FOUND, new SanctionedPersonUpdateRequest())
         .body()
         .jsonPath()
         .getObject("", GenericApiError.class).getError();
 
-    assertPersonNonExistenceError(personName, error);
+    assertPersonNonExistenceError(personId, error);
   }
 }
