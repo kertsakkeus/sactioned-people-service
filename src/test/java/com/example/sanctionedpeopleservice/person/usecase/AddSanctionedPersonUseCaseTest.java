@@ -53,7 +53,7 @@ class AddSanctionedPersonUseCaseTest {
     Optional<UseCaseError> useCaseError = addSanctionedPersonUseCase.addSanctionedPerson(sanctionedPersonRequest).getError();
 
     assertTrue(useCaseError.isPresent());
-    assertError(useCaseError.get(), "Person with id: ".concat(personId.toString())
+    assertError(useCaseError.get(), "Person ".concat(personName)
         .concat(" already exist in sanctioned people list!"));
   }
 

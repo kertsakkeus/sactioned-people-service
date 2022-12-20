@@ -22,17 +22,17 @@ public class AddSanctionedPersonUseCase {
 
   public UseCaseResult<SanctionedPerson> addSanctionedPerson(SanctionedPersonRequest request) {
     return sanctionedPersonRepository.findByPersonName(request.getPersonName())
-        .map(sanctionedPerson -> new UseCaseResult<SanctionedPerson>(createExistingPersonError(sanctionedPerson.getId())))
+        .map(sanctionedPerson -> new UseCaseResult<SanctionedPerson>(createExistingPersonError(sanctionedPerson.getPersonName())))
         .orElseGet(() -> new UseCaseResult<>(sanctionedPersonRepository.save(SanctionedPerson.builder()
             .personName(request.getPersonName())
             .build())));
   }
 
-  private UseCaseError createExistingPersonError(Long personId) {
+  private UseCaseError createExistingPersonError(String personName) {
     return new UseCaseError("Person exist", PERSON_EXIST,
         List.of(ErrorDetail.builder()
-            .message("Person with id: "
-                .concat(personId.toString())
+            .message("Person "
+                .concat(personName)
                 .concat(" already exist in sanctioned people list!"))
             .build()));
   }
