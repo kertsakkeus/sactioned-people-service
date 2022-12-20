@@ -34,7 +34,7 @@ public class FindSanctionedPersonUseCase {
   private UseCaseError createPersonNonExistenceError(Long personId) {
     return new UseCaseError("Person does not exist", PERSON_NOT_FOUND,
         List.of(ErrorDetail.builder()
-            .message("Person with id: "
+            .message("Person with id "
                 .concat(personId.toString())
                 .concat(" does not exist in sanctioned people list!"))
             .build()));

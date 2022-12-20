@@ -41,7 +41,7 @@ class FindSanctionedPersonUseCaseTest {
     Optional<UseCaseError> useCaseError = findSanctionedPersonUseCase.getSanctionedPerson(personId).getError();
 
     assertTrue(useCaseError.isPresent());
-    assertError(useCaseError.get(), "Person with id: ".concat(personId.toString())
+    assertError(useCaseError.get(), "Person with id ".concat(personId.toString())
         .concat(" does not exist in sanctioned people list!"));
   }
 

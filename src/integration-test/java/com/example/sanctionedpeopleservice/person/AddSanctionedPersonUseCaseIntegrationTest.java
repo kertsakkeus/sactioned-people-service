@@ -57,6 +57,6 @@ public class AddSanctionedPersonUseCaseIntegrationTest extends BaseIntegrationTe
         .jsonPath()
         .getObject("", GenericApiError.class).getError();
 
-    assertExistingPersonError(generatedPerson.getSanctionedPerson().getId(), error);
+    assertExistingPersonError(generatedPerson.getSanctionedPerson().getPersonName(), error);
   }
 }
