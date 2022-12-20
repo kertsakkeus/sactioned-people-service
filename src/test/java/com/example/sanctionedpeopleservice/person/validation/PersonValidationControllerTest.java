@@ -28,7 +28,7 @@ class PersonValidationControllerTest {
 
     PersonValidationResource personValidationResource = PersonValidationResource.builder()
         .personName(personName)
-        .isSanctioned(true)
+        .sanctioned(true)
         .description("description")
         .build();
 

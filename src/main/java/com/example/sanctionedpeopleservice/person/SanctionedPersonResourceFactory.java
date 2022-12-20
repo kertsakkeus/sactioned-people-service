@@ -21,10 +21,10 @@ public class SanctionedPersonResourceFactory {
         .id(sanctionedPerson.getId())
         .personName(sanctionedPerson.getPersonName())
         .build()
-        .add(createSanctionePersonLinks(sanctionedPerson.getPersonName()));
+        .add(createSanctionedPersonLinks(sanctionedPerson.getPersonName()));
   }
 
-  private List<Link> createSanctionePersonLinks(String personName) {
+  private List<Link> createSanctionedPersonLinks(String personName) {
     return List.of(
         linkTo(methodOn(SanctionedPersonController.class).updateSanctionedPerson(personName,
             SanctionedPersonUpdateRequest.builder().build()))

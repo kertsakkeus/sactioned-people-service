@@ -22,13 +22,13 @@ public class AddSanctionedPersonUseCase {
 
   public UseCaseResult<SanctionedPerson> addSanctionedPerson(SanctionedPersonRequest request) {
     return sanctionedPersonRepository.findByPersonName(request.getPersonName())
-        .map(sanctionedPerson -> new UseCaseResult<SanctionedPerson>(createPersonError(sanctionedPerson.getPersonName())))
+        .map(sanctionedPerson -> new UseCaseResult<SanctionedPerson>(createExistingPersonError(sanctionedPerson.getPersonName())))
         .orElseGet(() -> new UseCaseResult<>(sanctionedPersonRepository.save(SanctionedPerson.builder()
             .personName(request.getPersonName())
             .build())));
   }
 
-  private UseCaseError createPersonError(String personName) {
+  private UseCaseError createExistingPersonError(String personName) {
     return new UseCaseError("Person exist", PERSON_EXIST,
         List.of(ErrorDetail.builder()
             .message("Person: "

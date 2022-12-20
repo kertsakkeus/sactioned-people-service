@@ -39,7 +39,7 @@ class AddSanctionedPersonUseCaseTest {
   }
 
   @Test
-  void addSanctionedPerson_AlreadyExist() {
+  void addSanctionedPerson_AlreadyExists() {
     when(sanctionedPersonRepository.findByPersonName(personName)).thenReturn(Optional.of(SanctionedPerson.builder()
                                                                                              .personName(personName)
                                                                                              .build()));
